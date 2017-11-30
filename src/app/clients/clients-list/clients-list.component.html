@@ -1,0 +1,15 @@
+<div *ngIf="clients.length == 0">
+  Chargement
+</div>
+<nav class="panel" *ngIf="clients.length">
+  <a *ngFor="let client of clients" [routerLink]="[client.id]" class="panel-block is-block">
+    <div class="columns">
+      <div class="column is-four-fifths is-flex">
+        <img class="avatar" src="{{client.avatar}}" alt=""> {{client.prenom}} {{client.nom}}
+      </div>
+      <div class="column">
+        <span class="tag is-info is-rounded is-pulled-right">{{client.notes.length}}</span>
+      </div>
+    </div>
+  </a>
+</nav>

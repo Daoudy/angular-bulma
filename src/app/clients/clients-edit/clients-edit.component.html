@@ -1,0 +1,59 @@
+<h2 class="subtitle" *ngIf="client">Edition de {{client.prenom}} {{client.nom}}</h2>
+<div *ngIf="!client">
+  <h2 class="title">Nouveau client</h2>
+</div>
+<hr>
+<form [formGroup]="clientForm" (ngSubmit)="onSubmit()">
+  <div class="field">
+    <label for="nom" class="label">Nom :</label>
+    <div class="control"><input placeholder="Ex: Dupont" type="text" class="input" formControlName="nom" id="nom"></div>
+  </div>
+  <div class="field">
+    <label for="prenom" class="label">Prénom :</label>
+    <div class="control"><input placeholder="Ex: Jean" type="text" class="input" formControlName="prenom" id="prenom"></div>
+  </div>
+  <div class="field">
+    <label for="avatar" class="label">Avatar :</label>
+    <div class="control"><input placeholder="Ex: http://mon-avatar.com/fichier.jpg" type="text" class="input" formControlName="avatar" #avatar id="avatar"></div>
+    <img [src]="avatar.value" class="avatar-preview image is-128x128" alt="">
+  </div>
+  <div class="field">
+    <label for="ville" class="label">Ville :</label>
+    <div class="control"><input placeholder="Ex: Paris" type="text" class="input" formControlName="ville" id="ville"></div>
+  </div>
+  <hr>
+  <div formArrayName="notes">
+    <div class="field" *ngFor="let noteCtrl of clientForm.get('notes').controls; let i = index" [formGroupName]="i">
+      <div class="columns">
+        <div class="column is-4">
+          <input type="text" placeholder="Date" class="input" readonly formControlName="date">
+        </div>
+        <div class="column is-7">
+            <input type="text" placeholder="Contenu" class="input"  formControlName="contenu">
+        </div>
+        <div class="column is-1">
+            <button type="button" class="button is-danger" (click)="onDeleteNote(i)">X</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="field is-clearfix">
+    <p class="control">
+      <button type="button" class="button is-success is-small is-pulled-right" (click)="onAddNote()">Ajouter une note</button>
+    </p>
+  </div>
+  <hr>
+  <div class="field is-grouped is-grouped-right">
+    <p class="control">
+      <button type="submit" class="button is-primary"  [disabled]="!clientForm.valid">
+        Enregistrer
+      </button>
+    </p>
+    <p class="control">
+      <button class="button is-light" (click)="onCancel()">
+        Annuler
+      </button>
+    </p>
+  </div>
+</form>

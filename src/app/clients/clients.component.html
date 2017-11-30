@@ -1,0 +1,28 @@
+<section class="hero is-primary">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Les clients
+      </h1>
+      <h2 class="subtitle">
+        Sélectionnez un client pour voir ses détails et l'éditer
+      </h2>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column">
+        <app-clients-list></app-clients-list>
+        <hr>
+        <div class="is-pulled-right">
+          <a [routerLink]="['new']" class="button is-primary">Ajouter un client</a>
+        </div>
+      </div>
+      <div class="column">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</section>
