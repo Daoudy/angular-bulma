@@ -1,3 +1,28 @@
-<p>
-  factures works!
-</p>
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Les factures
+      </h1>
+      <h2 class="subtitle">
+        Cliquez sur une facture pour l'éditer !
+      </h2>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8">
+        <app-factures-list></app-factures-list>
+        <hr>
+        <div class="is-pulled-right">
+          <a [routerLink]="['new']" class="button is-primary">Ajouter une facture</a>
+        </div>
+      </div>
+      <div class="column">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</section>

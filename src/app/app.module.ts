@@ -19,6 +19,7 @@ import { ClientsStartComponent } from './clients/clients-start/clients-start.com
 import { ClientsEditComponent } from './clients/clients-edit/clients-edit.component';
 import { FacturesStartComponent } from './factures/factures-start/factures-start.component';
 import { FacturesEditComponent } from './factures/factures-edit/factures-edit.component';
+import { FacturesService } from 'app/factures/factures.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { FacturesEditComponent } from './factures/factures-edit/factures-edit.co
   imports: [
     BrowserModule, HttpModule, FormsModule, AppRoutingModule, ReactiveFormsModule
   ],
-  providers: [ClientsService, AuthService],
+  providers: [ClientsService, FacturesService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
