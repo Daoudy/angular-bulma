@@ -5,6 +5,9 @@ import { ClientsStartComponent } from './clients/clients-start/clients-start.com
 import { ClientsComponent } from './clients/clients.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { FacturesComponent } from 'app/factures/factures.component';
+import { FacturesStartComponent } from 'app/factures/factures-start/factures-start.component';
+import { FacturesEditComponent } from 'app/factures/factures-edit/factures-edit.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: 'clients', pathMatch: 'full'},
@@ -14,12 +17,12 @@ const appRoutes: Routes = [
     {path: ':id', component: ClientsDetailsComponent},
     {path: ':id/edit', component: ClientsEditComponent},
   ]},
-  // {path: 'factures', component: FacturesComponent, children: [
-  //   {path: '', component: FactureStartComponent},
-  //   {path: 'new', component: FactureEditComponent, pathMatch: 'full'},
-  //   {path: 'new/:clientId', component: FactureEditComponent},
-  //   {path: ':id', component: FactureEditComponent},
-  // ]},
+  {path: 'factures', component: FacturesComponent, children: [
+    {path: '', component: FacturesStartComponent},
+    {path: 'new', component: FacturesEditComponent, pathMatch: 'full'},
+    {path: 'new/:clientId', component: FacturesEditComponent},
+    {path: ':id', component: FacturesEditComponent},
+  ]},
   // {path: 'signup', component: SignupComponent},
   {path: 'login', component: LoginComponent}
 ]

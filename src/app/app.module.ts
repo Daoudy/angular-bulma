@@ -14,10 +14,11 @@ import { ClientsListComponent } from './clients/clients-list/clients-list.compon
 import { ClientsDetailsComponent } from './clients/clients-details/clients-details.component';
 import { FacturesComponent } from './factures/factures.component';
 import { FacturesListComponent } from './factures/factures-list/factures-list.component';
-import { FacturesDetailsComponent } from './factures/factures-details/factures-details.component';
 import { HttpModule } from '@angular/http';
 import { ClientsStartComponent } from './clients/clients-start/clients-start.component';
 import { ClientsEditComponent } from './clients/clients-edit/clients-edit.component';
+import { FacturesStartComponent } from './factures/factures-start/factures-start.component';
+import { FacturesEditComponent } from './factures/factures-edit/factures-edit.component';
 
 @NgModule({
   declarations: [
@@ -28,10 +29,11 @@ import { ClientsEditComponent } from './clients/clients-edit/clients-edit.compon
     ClientsDetailsComponent,
     FacturesComponent,
     FacturesListComponent,
-    FacturesDetailsComponent,
     LoginComponent,
     ClientsStartComponent,
-    ClientsEditComponent
+    ClientsEditComponent,
+    FacturesStartComponent,
+    FacturesEditComponent
   ],
   imports: [
     BrowserModule, HttpModule, FormsModule, AppRoutingModule, ReactiveFormsModule
