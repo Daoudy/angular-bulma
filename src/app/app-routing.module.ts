@@ -16,6 +16,8 @@ const appRoutes: Routes = [
     {path: 'new', component: ClientsEditComponent, pathMatch: 'full'},
     {path: ':id', component: ClientsDetailsComponent},
     {path: ':id/edit', component: ClientsEditComponent},
+    {path: ':id/facture', redirectTo: ':id', pathMatch: 'full'},
+    {path: ':id/facture/:numero', component: FacturesEditComponent}
   ]},
   {path: 'factures', component: FacturesComponent, children: [
     {path: '', component: FacturesStartComponent},

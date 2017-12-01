@@ -43,6 +43,7 @@ export class ClientsEditComponent implements OnInit {
 
     if (this.editMode) {
       this.cService.getClient(this.id).then((client: Client) => {
+        this.client = client;
         const notes = new FormArray([]);
 
         if (client.notes) {
@@ -68,7 +69,7 @@ export class ClientsEditComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['../../'], {relativeTo: this.route});
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
   onSubmit() {

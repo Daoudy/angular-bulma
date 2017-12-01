@@ -1,6 +1,9 @@
 import { ClientsService } from './../clients.service';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { FacturesService } from 'app/factures/factures.service';
+import { Facture } from 'app/shared/models/facture.model';
+import { lang } from 'app/shared/lang';
 
 @Component({
   selector: 'app-clients-details',
@@ -9,14 +12,19 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class ClientsDetailsComponent implements OnInit {
 
+  lang = lang;
   client;
+  factures: Facture[] = [];
 
-  constructor(private cService: ClientsService, private route: ActivatedRoute) { }
+  constructor(private cService: ClientsService, private route: ActivatedRoute, private fService: FacturesService) { }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       const id = +params['id'];
-      this.cService.getClient(id).then(client => this.client = client);
+      this.cService.getClient(id).then(client => {
+        this.client = client;
+        this.fService.getFacturesFromClient(this.client.id).then((factures: Facture[]) => this.factures = factures);
+      });
     })
   }
 

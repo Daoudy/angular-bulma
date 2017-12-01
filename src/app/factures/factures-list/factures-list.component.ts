@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FacturesService } from 'app/factures/factures.service';
 import { Facture } from 'app/shared/models/facture.model';
 import { lang } from "app/shared/lang";
+import { ClientsService } from 'app/clients/clients.service';
 
 @Component({
   selector: 'app-factures-list',
@@ -15,7 +16,7 @@ export class FacturesListComponent implements OnInit {
   filteredFactures: Facture[] = [];
   total: number = 0;
 
-  constructor(private fService: FacturesService) { }
+  constructor(private fService: FacturesService, private cService: ClientsService) { }
 
   ngOnInit() {
     this.fService.getFactures().then((factures: Facture[]) => {

@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="content">
+      
         <p *ngIf="client.notes.length === 0">Aucune note pour le client pour l'instant</p>
         <nav class="panel" *ngIf="client.notes">
           <a href="#" class="panel-block" *ngFor="let note of client.notes">
@@ -25,33 +25,25 @@
           </a>
         </nav>
 
-        <table class="table is-fullwidth is-striped is-hoverable">
-          <tr>
-            <th>Numéro</th>
-            <th>Date</th>
-            <th>Montant</th>
-            <th>Statut</th>
-          </tr>
-          <tr>
-            <td><a href="#">FA003</a></td>
-            <td>10/11/2017</td>
-            <td>2000,00 €</td>
-            <td><span class="tag is-success">Réglée</span></td>
-          </tr>
-          <tr>
-            <td><a href="#">FA003</a></td>
-            <td>10/11/2017</td>
-            <td>2000,00 €</td>
-            <td><span class="tag is-success">Réglée</span></td>
-          </tr>
-          <tr>
-            <td><a href="#">FA003</a></td>
-            <td>10/11/2017</td>
-            <td>2000,00 €</td>
-            <td><span class="tag is-success">Réglée</span></td>
-          </tr>
+        <table class="table is-fullwidth is-hoverable is-striped">
+          <thead>
+            <tr>
+              <th>Numéro</th>
+              <th>Date</th>
+              <th>Montant</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let facture of factures">
+              <td><a [routerLink]="['facture', facture.numero]">{{facture.numero}}</a></td>
+              <td>{{facture.date | date: 'dd/MM/yyyy'}}</td>
+              <td>{{facture.montant | currency:'EUR':'symbol'}}</td>
+              <td><span class="tag {{lang.factures.classes[facture.statut]}}">{{lang.factures.labels[facture.statut]}}</span></td>
+            </tr>
+          </tbody>
         </table>
-      </div>
+      
     </div>
     <footer class="card-footer">
       <a [routerLink]="['edit']" class="card-footer-item">Editer</a>

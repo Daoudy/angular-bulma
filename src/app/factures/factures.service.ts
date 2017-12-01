@@ -3,10 +3,12 @@ import { AuthService } from "app/shared/auth.service";
 import { Facture } from "app/shared/models/facture.model";
 import { ClientsService } from "app/clients/clients.service";
 import { Client } from "app/shared/models/client.model";
+import { Subject } from "rxjs/Subject";
 
 @Injectable()
 export class FacturesService {
   facturesLoaded: boolean = false;
+  facturesChanged = new Subject<Facture[]>();
 
   factures: Facture[] = [
     {
@@ -64,6 +66,18 @@ export class FacturesService {
     return 'FA' + newNum;
   }
 
+  getFacturesFromClient(clientId: number){
+    if (!this.facturesLoaded) {
+      return this.getFactures().then((factures: Facture[]) => {
+        return factures.filter(facture => facture.clientId === clientId);
+      });
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve(this.factures.filter(facture => facture.clientId === clientId));
+      });
+    }
+  }
+
   getFacture(numero: string) {
     if (!this.facturesLoaded) {
       return this.getFactures().then((factures: Facture[]) => {
@@ -89,5 +103,23 @@ export class FacturesService {
       }
       resolve(this.factures.slice());
     });
+  }
+
+  updateFacture(facture: Facture){
+    this.cService.getClient(facture.clientId).then((client: Client) => {
+      facture.clientDetails = client;
+
+      const index = this.factures.findIndex(_facture => _facture.numero === facture.numero);
+      this.factures[index] = facture;
+      this.facturesChanged.next(this.factures.slice());
+    });
+  }
+
+  addFacture(facture: Facture){
+    this.cService.getClient(facture.clientId).then((client: Client) => {
+      facture.clientDetails = client;
+      this.factures.push(facture);
+      this.facturesChanged.next(this.factures.slice());
+    })
   }
 }

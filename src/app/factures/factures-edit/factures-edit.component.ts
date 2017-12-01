@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClientsService } from 'app/clients/clients.service';
 import * as moment from 'moment';
 import { Facture } from 'app/shared/models/facture.model';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-factures-edit',
@@ -17,6 +18,7 @@ export class FacturesEditComponent implements OnInit {
   numero: string;
   editMode: boolean = false;
   factureForm: FormGroup;
+  facture: Facture;
   clients: Client[] = [];
 
   constructor(private route: ActivatedRoute, private router: Router, private fService: FacturesService, private cService: ClientsService) { }
@@ -42,6 +44,8 @@ export class FacturesEditComponent implements OnInit {
 
     if(this.editMode){
       this.fService.getFacture(this.numero).then((facture: Facture) => {
+        this.facture = facture;
+
         this.factureForm = new FormGroup({
           numero: new FormControl(facture.numero, Validators.required),
           clientId: new FormControl(facture.clientId, Validators.required),
@@ -50,6 +54,25 @@ export class FacturesEditComponent implements OnInit {
           statut: new FormControl(facture.statut, Validators.required)
         });
       });
+    }
+  }
+
+  
+
+  onCancel() {
+    this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  onSubmit() {
+    if (this.factureForm.valid) {
+      const value = this.factureForm.value;
+      if (this.editMode) {
+        value.numero = this.numero;
+        this.fService.updateFacture(value);
+      } else {
+        this.fService.addFacture(value);
+      }
+      this.onCancel();
     }
   }
 

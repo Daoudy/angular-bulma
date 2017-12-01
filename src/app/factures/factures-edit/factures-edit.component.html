@@ -1,51 +1,67 @@
-<form [formGroup]="factureForm" (ngSubmit)="onSubmit()">
-  <div class="field">
-    <label for="numero" class="label">Numéro :</label>
-    <div class="control"><input type="text" class="input" formControlName="numero" id="numero" readonly></div>
-  </div>
-  <div class="field">
-    <label for="client" class="label">Client : </label>
-    <div class="control">
-      <div class="select is-fullwidth">
-        <select id="client" formControlName="clientId">
-          <option value="">-- Choisir un client --</option>
-          <option value="{{client.id}}" *ngFor="let client of clients">{{client.prenom}} {{client.nom}}</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  <div class="field">
-    <label for="date" class="label">Date : </label>
-    <div class="control"><input type="date" class="input" formControlName="date" id="date"></div>
-  </div>
-  <div class="field">
-    <label for="montant" class="label">Montant : </label>
-    <div class="control"><input type="number" class="input" formControlName="montant" id="montant"></div>
-  </div>
-  <div class="field">
-    <label for="statut" class="label">Statut :</label>
-    <div class="control">
-      <div class="select is-fullwidth">
-        <select formControlName="statut" id="statut">
-          <option value="">-- Choisir un statut --</option>
-          <option value="envoyee">Envoyée</option>
-          <option value="reglee">Réglée</option>
-          <option value="annulee">Annulée</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  <hr>
-  <div class="field is-grouped is-grouped-right">
-    <p class="control">
-      <button type="submit" class="button is-primary"  [disabled]="!factureForm.valid">
-        Enregistrer
-      </button>
-    </p>
-    <p class="control">
-      <button class="button is-light" (click)="onCancel()">
-        Annuler
-      </button>
+<div class="card">
+  <div class="card-header">
+    <p class="card-header-title">
+      <span *ngIf="facture"><i class="fa fa-edit"></i> Edition de la facture {{facture.numero}} de {{facture.clientDetails.prenom}} {{facture.clientDetails.nom}}</span>
+      <span *ngIf="!facture">Nouvelle facture</span>
     </p>
   </div>
-</form>
+  <div class="card-content">
+    <form [formGroup]="factureForm" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label for="numero" class="label">Numéro :</label>
+        <div class="control">
+          <input type="text" class="input" formControlName="numero" id="numero" readonly>
+        </div>
+      </div>
+      <div class="field">
+        <label for="client" class="label">Client : </label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="client" formControlName="clientId">
+              <option value="">-- Choisir un client --</option>
+              <option value="{{client.id}}" *ngFor="let client of clients">{{client.prenom}} {{client.nom}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="date" class="label">Date : </label>
+        <div class="control">
+          <input type="date" class="input" formControlName="date" id="date">
+        </div>
+      </div>
+      <div class="field">
+        <label for="montant" class="label">Montant : </label>
+        <div class="control">
+          <input type="number" class="input" formControlName="montant" id="montant">
+        </div>
+      </div>
+      <div class="field">
+        <label for="statut" class="label">Statut :</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select formControlName="statut" id="statut">
+              <option value="">-- Choisir un statut --</option>
+              <option value="envoyee">Envoyée</option>
+              <option value="reglee">Réglée</option>
+              <option value="annulee">Annulée</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="field is-grouped is-grouped-right">
+        <p class="control">
+          <button type="submit" class="button is-primary" [disabled]="!factureForm.valid">
+            Enregistrer
+          </button>
+        </p>
+        <p class="control">
+          <button class="button is-light" (click)="onCancel()">
+            Annuler
+          </button>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
