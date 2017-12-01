@@ -10,7 +10,9 @@ import { lang } from "app/shared/lang";
 })
 export class FacturesListComponent implements OnInit {
   lang = lang;
+  filter: string = '';
   factures: Facture[] = [];
+  filteredFactures: Facture[] = [];
   total: number = 0;
 
   constructor(private fService: FacturesService) { }
@@ -18,8 +20,18 @@ export class FacturesListComponent implements OnInit {
   ngOnInit() {
     this.fService.getFactures().then((factures: Facture[]) => {
       this.factures = factures
-      this.total = this.factures.reduce((total, facture) => total + facture.montant, 0);
+      this.onChangeFilter();
     });
+  }
+
+  onChangeFilter(){
+    if(this.filter){
+      this.filteredFactures = this.factures.slice().filter(facture => facture.statut == this.filter);
+    } else {
+      this.filteredFactures = this.factures.slice();
+    }
+
+    this.total = this.filteredFactures.reduce((total, facture) => total + facture.montant, 0);
   }
 
 }

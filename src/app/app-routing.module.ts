@@ -21,7 +21,7 @@ const appRoutes: Routes = [
     {path: '', component: FacturesStartComponent},
     {path: 'new', component: FacturesEditComponent, pathMatch: 'full'},
     {path: 'new/:clientId', component: FacturesEditComponent},
-    {path: ':id', component: FacturesEditComponent},
+    {path: ':numero', component: FacturesEditComponent},
   ]},
   // {path: 'signup', component: SignupComponent},
   {path: 'login', component: LoginComponent}
