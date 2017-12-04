@@ -1,3 +1,4 @@
+import { FlashService } from './../shared/flash.service';
 import { Client } from './../shared/models/client.model';
 import { AuthService } from './../shared/auth.service';
 import {Injectable} from '@angular/core'
@@ -12,13 +13,12 @@ export class ClientsService {
   clientsLoaded = false;
   clients: Client[] = [];
 
-  constructor(private http: Http, private authService: AuthService){
+  constructor(private http: Http, private authService: AuthService, private flash: FlashService){
   }
 
   getClient(id: number){
     if(!this.clientsLoaded){
       return this.getClients().then((clients: Client[]) => {
-        this.clientsLoaded = true;
         return clients.find(client => client.id === id);
       })
     } else {
@@ -26,27 +26,33 @@ export class ClientsService {
         resolve(this.clients.find(client => client.id === id));
       })
     }
-    // return this.http.get('https://boite-a-recettes-4232d.firebaseio.com/clients/'+id+'.json').map((response: Response) => {
-    //   const client: Client = response.json();
-    //   return client;
-    // }).toPromise();
   }
 
   updateClient(client: Client){
     const index = this.clients.findIndex(_client => _client.id === client.id);
     this.clients[index] = client;
+    this.store().subscribe(
+      success => this.flash.success(`${client.prenom} ${client.nom} a bien été modifié !`),
+      error => this.flash.error(`Erreur lors de l'enregistrement des clients`));
     this.clientsChanged.next(this.clients.slice());
   }
 
   addClient(client: Client){
     client.id = this.getLastId();
     this.clients.push(client);
+    this.store().subscribe(
+      success => this.flash.success(`${client.prenom} ${client.nom} a bien été ajouté !`),
+      error => this.flash.error(`Erreur lors de l'enregistrement des clients`));
     this.clientsChanged.next(this.clients.slice());
   }
 
   private getLastId(){
-    const lastId = this.clients.sort((a, b) => b.id - a.id).shift().id + 1;
+    const lastId = this.clients.slice().sort((a, b) => b.id - a.id).shift().id + 1;
     return lastId;
+  }
+
+  store(){
+    return this.http.put('https://boite-a-recettes-4232d.firebaseio.com/clients.json', this.clients)
   }
 
   getClients(){

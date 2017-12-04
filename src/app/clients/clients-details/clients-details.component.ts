@@ -20,14 +20,13 @@ export class ClientsDetailsComponent implements OnInit {
   constructor(private cService: ClientsService, private route: ActivatedRoute, private fService: FacturesService) { }
 
   ngOnInit() {
-    console.log('init details');
     this.route.params.subscribe((params: Params) => {
-      console.log("params");
       const id = +params['id'];
       this.cService.getClient(id).then((client: Client) => {
         this.client = client;
-        this.factures = this.fService.getFacturesFromClient(this.client.id)
-        console.log("in client :", this.factures);
+        this.fService.getFacturesFromClient(this.client.id).then((factures: Facture[]) => {
+          this.factures = factures;
+        })
       })
     })
   }

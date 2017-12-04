@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      
+
         <p *ngIf="client.notes.length === 0">Aucune note pour le client pour l'instant</p>
         <nav class="panel" *ngIf="client.notes">
           <a href="#" class="panel-block" *ngFor="let note of client.notes">
@@ -43,11 +43,11 @@
             </tr>
           </tbody>
         </table>
-      
+
     </div>
     <footer class="card-footer">
       <a [routerLink]="['edit']" class="card-footer-item">Editer</a>
-      <a href="#" class="card-footer-item">Créer une factures</a>
+      <a [routerLink]="['/','factures','new', client.id]" class="card-footer-item">Créer une factures</a>
     </footer>
   </div>
 </div>

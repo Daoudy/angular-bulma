@@ -1,8 +1,10 @@
+import { FlashService } from './shared/flash.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthService } from './shared/auth.service';
 import { ClientsService } from './clients/clients.service';
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -21,6 +23,9 @@ import { FacturesStartComponent } from './factures/factures-start/factures-start
 import { FacturesEditComponent } from './factures/factures-edit/factures-edit.component';
 import { FacturesService } from 'app/factures/factures.service';
 
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,9 +42,9 @@ import { FacturesService } from 'app/factures/factures.service';
     FacturesEditComponent
   ],
   imports: [
-    BrowserModule, HttpModule, FormsModule, AppRoutingModule, ReactiveFormsModule
+    BrowserModule, BrowserAnimationsModule, HttpModule, FormsModule, AppRoutingModule, ReactiveFormsModule, SimpleNotificationsModule.forRoot()
   ],
-  providers: [ClientsService, FacturesService, AuthService],
+  providers: [ClientsService, FacturesService, AuthService, FlashService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

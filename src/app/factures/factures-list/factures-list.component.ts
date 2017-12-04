@@ -22,33 +22,33 @@ export class FacturesListComponent implements OnInit {
 
   constructor(private fService: FacturesService, private cService: ClientsService) { }
 
+  private overloadFactures(){
+    for(let facture of this.factures){
+      this.cService.getClient(+facture.clientId).then((client: Client) => {
+        facture.clientDetails = client
+      });
+    }
+  }
+
   ngOnInit() {
     this.fService.facturesChanged.subscribe((factures: Facture[]) => {
       this.factures = factures;
-      for(let facture of this.factures){
-        this.cService.getClient(+facture.clientId).then((client: Client) => {
-          facture.clientDetails = client
-        });
-      }
-      this.onChangeFilter();
+      this.overloadFactures();
+      this.filterFactures();
     })
 
-    this.cService.getClients().then((clients: Client[]) => this.clients = clients);
+    const clientsPromise = this.cService.getClients()
+    const facturesPromise = this.fService.getFactures()
 
-    this.factures = this.fService.getFactures();
-
-    for(let facture of this.factures){
-      this.cService.getClient(+facture.clientId).then((client: Client) => facture.clientDetails = client);
-    }
-    // console.log(this.factures);
-    this.onChangeFilter();
+    Promise.all([clientsPromise, facturesPromise]).then(([clients, factures]) => {
+      this.clients = clients
+      this.factures = factures;
+      this.overloadFactures();
+      this.filterFactures();
+    });
   }
 
-  getClient(id){
-    return this.clients.find(client => client.id == id);
-  }
-
-  onChangeFilter(){
+  filterFactures(){
     if(this.filter){
       this.filteredFactures = this.factures.slice().filter(facture => facture.statut == this.filter);
     } else {
@@ -56,6 +56,10 @@ export class FacturesListComponent implements OnInit {
     }
 
     this.total = this.filteredFactures.reduce((total, facture) => total + facture.montant, 0);
+  }
+
+  onChangeFilter(){
+    this.filterFactures();
   }
 
 }

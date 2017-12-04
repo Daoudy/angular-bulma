@@ -22,7 +22,7 @@
     <tr *ngFor="let facture of filteredFactures">
       <td><a [routerLink]="[facture.numero]">{{facture.numero}}</a></td>
       <td><a [routerLink]="['../', 'clients', facture.clientId]">
-        <span *ngIf="facture.clientDetails">{{getClient(facture.clientId).prenom}} {{getClient(facture.clientId).nom}}</span></a></td>
+        <span *ngIf="facture.clientDetails">{{facture.clientDetails.prenom}} {{facture.clientDetails.nom}}</span></a></td>
       <td>{{facture.date | date: 'dd/MM/yyyy'}}</td>
       <td><span class="tag {{lang.factures.classes[facture.statut]}}">{{lang.factures.labels[facture.statut]}}</span></td>
       <td>{{facture.montant | currency:'EUR':'symbol'}}</td>

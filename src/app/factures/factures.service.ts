@@ -1,3 +1,5 @@
+import { FlashService } from './../shared/flash.service';
+import { Http, Response } from '@angular/http';
 import { Injectable } from "@angular/core";
 import { AuthService } from "app/shared/auth.service";
 import { Facture } from "app/shared/models/facture.model";
@@ -47,8 +49,14 @@ export class FacturesService {
 
   constructor(
     private authService: AuthService,
-    private cService: ClientsService
+    private cService: ClientsService,
+    private http: Http,
+    private flash: FlashService
   ) {}
+
+  store(){
+    return this.http.put('https://boite-a-recettes-4232d.firebaseio.com/factures.json', this.factures)
+  }
 
   getNewChrono() {
     const lastNumero = +this.factures.slice()
@@ -68,32 +76,64 @@ export class FacturesService {
   }
 
   getFacturesFromClient(clientId: number) {
-    return this.factures.filter(facture => facture.clientId == clientId);
+    if(!this.facturesLoaded){
+      return this.getFactures().then((factures: Facture[]) => {
+        return factures.filter(facture => facture.clientId == clientId);
+      })
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve(this.factures.filter(facture => facture.clientId == clientId));
+      })
+    }
   }
 
   getFacture(numero: string) {
-    console.log(this.factures);
-    return this.factures.find(facture => {
-      console.log(facture.numero, numero)
-      return facture.numero == numero
-    });
+    if(!this.facturesLoaded){
+      return this.getFactures().then((factures: Facture[]) => {
+        return this.factures.find(facture => facture.numero == numero);
+      })
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve(this.factures.find(facture => facture.numero == numero));
+      })
+    }
   }
 
   getFactures() {
-    return this.factures.slice();
+    if(!this.facturesLoaded){
+      return this.http.get('https://boite-a-recettes-4232d.firebaseio.com/factures.json').map((response: Response) => {
+        return response.json();
+      }).toPromise<Facture[]>().then((factures: Facture[]) => {
+        this.factures = factures;
+        this.facturesLoaded = true;
+        this.facturesChanged.next(this.factures.slice());
+        return this.factures.slice();
+      })
+    } else {
+      return new Promise<Facture[]>((resolve, reject) => {
+        resolve(this.factures.slice());
+      });
+    }
   }
 
   updateFacture(facture: Facture) {
     const index = this.factures.findIndex(
       _facture => _facture.numero == facture.numero
     );
-    console.log(index, facture);
     this.factures[index] = facture;
+    this.store().subscribe(
+      success => this.flash.success(`La facture ${facture.numero} a bien été modifiée !`),
+      error => this.flash.error(`La facture ${facture.numero} n'a pas pu être modifiée`)
+    );
     this.facturesChanged.next(this.factures.slice());
   }
 
   addFacture(facture: Facture) {
     this.factures.push(facture);
+    this.store().subscribe(
+      success => this.flash.success(`La facture ${facture.numero} a bien été ajoutée !`),
+      error => this.flash.error(`La facture ${facture.numero} n'a pas pu être ajoutée`)
+    );
     this.facturesChanged.next(this.factures.slice());
   }
 }

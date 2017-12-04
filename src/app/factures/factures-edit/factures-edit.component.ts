@@ -19,6 +19,7 @@ export class FacturesEditComponent implements OnInit {
   factureForm: FormGroup;
   facture: Facture;
   clients: Client[] = [];
+  clientId: number = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +32,7 @@ export class FacturesEditComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       this.numero = params["numero"];
       this.editMode = params["numero"] != null;
+      this.clientId = +params["clientId"];
       this.createFormControls();
     })
 
@@ -46,30 +48,31 @@ export class FacturesEditComponent implements OnInit {
         this.fService.getNewChrono(),
         Validators.required
       ),
-      clientId: new FormControl("", Validators.required),
+      clientId: new FormControl(this.clientId, Validators.required),
       montant: new FormControl(0, Validators.required),
       date: new FormControl(moment().format("YYYY-MM-DD"), Validators.required),
       statut: new FormControl("", Validators.required)
     });
 
     if (this.editMode) {
-      this.facture = this.fService.getFacture(this.numero);
-      console.log(this.numero, this.facture);
+      this.fService.getFacture(this.numero).then((facture: Facture) => {
+        this.facture = facture;
 
-      this.cService.getClient(this.facture.clientId).then((client: Client) => {
-        this.facture.clientDetails = client;
+        this.cService.getClient(+this.facture.clientId).then((client: Client) => {
+          this.facture.clientDetails = client;
+          this.factureForm = new FormGroup({
+            numero: new FormControl(this.facture.numero, Validators.required),
+            clientId: new FormControl(this.facture.clientId, Validators.required),
+            montant: new FormControl(this.facture.montant, Validators.required),
+            date: new FormControl(
+              moment(this.facture.date).format("YYYY-MM-DD"),
+              Validators.required
+            ),
+            statut: new FormControl(this.facture.statut, Validators.required)
+          });
+        })
+
       })
-
-      this.factureForm = new FormGroup({
-        numero: new FormControl(this.facture.numero, Validators.required),
-        clientId: new FormControl(this.facture.clientId, Validators.required),
-        montant: new FormControl(this.facture.montant, Validators.required),
-        date: new FormControl(
-          moment(this.facture.date).format("YYYY-MM-DD"),
-          Validators.required
-        ),
-        statut: new FormControl(this.facture.statut, Validators.required)
-      });
     }
   }
 
