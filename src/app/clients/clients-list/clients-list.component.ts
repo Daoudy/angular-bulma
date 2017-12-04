@@ -16,9 +16,9 @@ export class ClientsListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cService.getClients().then((clients: Client[]) => {
-      this.clients = clients
-      console.log(this.clients);
+      this.clients = clients;
     });
+
     this.cService.clientsChanged.subscribe((clients: Client[]) => {
       this.clients = clients
     })

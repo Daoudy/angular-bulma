@@ -50,76 +50,50 @@ export class FacturesService {
     private cService: ClientsService
   ) {}
 
-  getNewChrono(){
-    const lastNumero = +this.factures.slice().sort((a, b) => {
-      const chrono1 = +a.numero.substr(2);
-      const chrono2 = +b.numero.substr(2);
-      return chrono2 - chrono1
-    }).shift().numero.substr(2);
+  getNewChrono() {
+    const lastNumero = +this.factures.slice()
+      .sort((a, b) => {
+        const chrono1 = +a.numero.substr(2);
+        const chrono2 = +b.numero.substr(2);
+        return chrono2 - chrono1;
+      }).shift().numero.substr(2);
 
-    let newNum = new String(lastNumero+1);
+    let newNum = new String(lastNumero + 1);
 
-    while(newNum.length < 4){
-      newNum = '0' + newNum;
+    while (newNum.length < 3) {
+      newNum = "0" + newNum;
     }
 
-    return 'FA' + newNum;
+    return "FA" + newNum;
   }
 
-  getFacturesFromClient(clientId: number){
-    if (!this.facturesLoaded) {
-      return this.getFactures().then((factures: Facture[]) => {
-        return factures.filter(facture => facture.clientId === clientId);
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        resolve(this.factures.filter(facture => facture.clientId === clientId));
-      });
-    }
+  getFacturesFromClient(clientId: number) {
+    return this.factures.filter(facture => facture.clientId == clientId);
   }
 
   getFacture(numero: string) {
-    if (!this.facturesLoaded) {
-      return this.getFactures().then((factures: Facture[]) => {
-        return factures.find(facture => facture.numero === numero);
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        resolve(this.factures.find(facture => facture.numero === numero));
-      });
-    }
+    console.log(this.factures);
+    return this.factures.find(facture => {
+      console.log(facture.numero, numero)
+      return facture.numero == numero
+    });
   }
 
   getFactures() {
-    return new Promise(async (resolve, reject) => {
-      for (let facture of this.factures) {
-        if (!facture.clientDetails) {
-          await this.cService
-            .getClient(facture.clientId)
-            .then((client: Client) => {
-              facture.clientDetails = client;
-            });
-        }
-      }
-      resolve(this.factures.slice());
-    });
+    return this.factures.slice();
   }
 
-  updateFacture(facture: Facture){
-    this.cService.getClient(facture.clientId).then((client: Client) => {
-      facture.clientDetails = client;
-
-      const index = this.factures.findIndex(_facture => _facture.numero === facture.numero);
-      this.factures[index] = facture;
-      this.facturesChanged.next(this.factures.slice());
-    });
+  updateFacture(facture: Facture) {
+    const index = this.factures.findIndex(
+      _facture => _facture.numero == facture.numero
+    );
+    console.log(index, facture);
+    this.factures[index] = facture;
+    this.facturesChanged.next(this.factures.slice());
   }
 
-  addFacture(facture: Facture){
-    this.cService.getClient(facture.clientId).then((client: Client) => {
-      facture.clientDetails = client;
-      this.factures.push(facture);
-      this.facturesChanged.next(this.factures.slice());
-    })
+  addFacture(facture: Facture) {
+    this.factures.push(facture);
+    this.facturesChanged.next(this.factures.slice());
   }
 }

@@ -13,30 +13,20 @@ export class AuthService {
   // authStateChanged = new Subject();
   token = null;
 
-  constructor(){
-    // fireApp.auth().onAuthStateChanged((user) => {
-    //   if(user){
-    //     fireApp.auth().currentUser.getIdToken().then(token => {
-    //       this.token = token
-    //       this.authStateChanged.next(true);
-    //     })
-    //   }
-    //   else {
-    //     this.authStateChanged.next(false);
-    //   }
-    // })
-  }
+  constructor(private router: Router){}
 
   isConnected(){
-    return fireApp.auth().currentUser !== null;
+    return this.token !== null;
   }
 
   loginUser(email, password){
     return fireApp.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
       return fireApp.auth().signInWithEmailAndPassword(email, password).then(response => {
-        fireApp.auth().currentUser.getIdToken().then(token => this.token = token)
-        console.log('Manual login');
-        // this.authStateChanged.next(true);
+        fireApp.auth().currentUser.getIdToken().then(token => {
+          this.token = token
+          this.router.navigate(['/']);
+        })
+
       });
     });
   }

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, Params } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { Location } from "@angular/common";
 import { FormArray, FormGroup, FormControl, Validators } from "@angular/forms";
-import * as moment from 'moment';
+import * as moment from "moment";
 
 @Component({
   selector: "app-clients-edit",
@@ -46,8 +46,8 @@ export class ClientsEditComponent implements OnInit {
         this.client = client;
         const notes = new FormArray([]);
 
-        if (client.notes) {
-          client.notes.forEach(note => {
+        if (this.client.notes) {
+          this.client.notes.forEach(note => {
             notes.push(
               new FormGroup({
                 date: new FormControl(note.date),
@@ -58,18 +58,18 @@ export class ClientsEditComponent implements OnInit {
         }
 
         this.clientForm = new FormGroup({
-          nom: new FormControl(client.nom, Validators.required),
-          prenom: new FormControl(client.prenom, Validators.required),
-          ville: new FormControl(client.ville, Validators.required),
-          avatar: new FormControl(client.avatar),
+          nom: new FormControl(this.client.nom, Validators.required),
+          prenom: new FormControl(this.client.prenom, Validators.required),
+          ville: new FormControl(this.client.ville, Validators.required),
+          avatar: new FormControl(this.client.avatar),
           notes: notes
         });
-      });
+      })
     }
   }
 
   onCancel() {
-    this.router.navigate(['../'], {relativeTo: this.route});
+    this.router.navigate(["../"], { relativeTo: this.route });
   }
 
   onSubmit() {

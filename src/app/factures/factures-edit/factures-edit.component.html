@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header">
     <p class="card-header-title">
-      <span *ngIf="facture"><i class="fa fa-edit"></i> Edition de la facture {{facture.numero}} de {{facture.clientDetails.prenom}} {{facture.clientDetails.nom}}</span>
+      <span *ngIf="facture && facture.clientDetails"><i class="fa fa-edit"></i> Edition de la facture {{facture.numero}} de {{facture.clientDetails.prenom}} {{facture.clientDetails.nom}}</span>
       <span *ngIf="!facture">Nouvelle facture</span>
     </p>
   </div>

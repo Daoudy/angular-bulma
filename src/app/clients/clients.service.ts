@@ -18,13 +18,18 @@ export class ClientsService {
   getClient(id: number){
     if(!this.clientsLoaded){
       return this.getClients().then((clients: Client[]) => {
+        this.clientsLoaded = true;
         return clients.find(client => client.id === id);
-      });
+      })
     } else {
       return new Promise((resolve, reject) => {
         resolve(this.clients.find(client => client.id === id));
       })
     }
+    // return this.http.get('https://boite-a-recettes-4232d.firebaseio.com/clients/'+id+'.json').map((response: Response) => {
+    //   const client: Client = response.json();
+    //   return client;
+    // }).toPromise();
   }
 
   updateClient(client: Client){
@@ -40,36 +45,35 @@ export class ClientsService {
   }
 
   private getLastId(){
-    const lastId = this.clients.slice().sort((a, b) => b.id - a.id).shift().id + 1;
-    console.log(lastId);
+    const lastId = this.clients.sort((a, b) => b.id - a.id).shift().id + 1;
     return lastId;
   }
 
   getClients(){
     if(!this.clientsLoaded){
       return this.http.get('https://boite-a-recettes-4232d.firebaseio.com/clients.json').map((response: Response) => {
-        const clients: Client[] = response.json();
+        const clients = response.json();
 
         for(let client of clients){
           if(!client.notes) client.notes = [];
         }
 
         return clients;
-      }).toPromise().then((clients: Client[]) => {
+      }).toPromise<Client[]>().then((clients: Client[]) => {
         this.clients = clients;
         this.clientsLoaded = true;
-
+        this.clientsChanged.next(this.clients.slice());
         return this.clients.slice();
       })
     } else {
-      return new Promise((resolve, reject) => {
+      return new Promise<Client[]>((resolve, reject) => {
         resolve(this.clients.slice());
-      })
+      });
     }
   }
 
   setClients(clients: Client[]){
     this.clients = clients;
-    this.clientsChanged.next(this.getClients());
+    this.clientsChanged.next(this.clients.slice());
   }
 }
