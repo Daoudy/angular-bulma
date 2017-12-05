@@ -34,7 +34,7 @@ export class FacturesListComponent implements OnInit {
     this.fService.facturesChanged.subscribe((factures: Facture[]) => {
       this.factures = factures;
       this.overloadFactures();
-      this.filterFactures();
+      this.calculateTotal();
     })
 
     const clientsPromise = this.cService.getClients()
@@ -44,22 +44,18 @@ export class FacturesListComponent implements OnInit {
       this.clients = clients
       this.factures = factures;
       this.overloadFactures();
-      this.filterFactures();
+      this.calculateTotal();
     });
   }
 
-  filterFactures(){
+  calculateTotal(){
+    let factures: Facture[] = [];
     if(this.filter){
-      this.filteredFactures = this.factures.slice().filter(facture => facture.statut == this.filter);
+      factures = this.factures.slice().filter(facture => facture.statut == this.filter);
     } else {
-      this.filteredFactures = this.factures.slice();
+      factures = this.factures.slice();
     }
 
-    this.total = this.filteredFactures.reduce((total, facture) => total + facture.montant, 0);
+    this.total = factures.reduce((total, facture) => total + facture.montant, 0);
   }
-
-  onChangeFilter(){
-    this.filterFactures();
-  }
-
 }

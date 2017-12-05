@@ -1,8 +1,9 @@
+import { Router } from '@angular/router';
+import { AuthService } from './shared/auth.service';
 import { OnInit } from '@angular/core';
 import { FacturesService } from './factures/factures.service';
 import { ClientsService } from 'app/clients/clients.service';
 import { Component } from '@angular/core';
-import { AuthService } from 'app/shared/auth.service';
 import { FlashService } from 'app/shared/flash.service';
 import { NotificationsService } from 'angular2-notifications';
 
@@ -13,8 +14,9 @@ import { NotificationsService } from 'angular2-notifications';
 })
 export class AppComponent implements OnInit {
   title = 'app';
+  isConnected = false;
 
-  constructor(private flash: FlashService, private notification: NotificationsService){}
+  constructor(private router: Router, private flash: FlashService, private notification: NotificationsService, private authService: AuthService){}
 
   options = {
     position: ["bottom", "left"],
@@ -23,6 +25,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(){
+    this.authService.authStateChanged.subscribe((state:boolean) => {
+      console.log('CONNEXION : ', state);
+      this.isConnected = state;
+      console.log(this.isConnected);
+    })
+
     this.flash.flashChanged.subscribe(flash => {
       switch(flash.type){
         case 'error':
@@ -34,4 +42,11 @@ export class AppComponent implements OnInit {
       }
     })
   }
+
+
+  ngOnDestroy(){
+    this.authService.authStateChanged.unsubscribe();
+    this.flash.flashChanged.unsubscribe();
+  }
+
 }

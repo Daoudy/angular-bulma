@@ -1,6 +1,6 @@
 <div class="field">
   <div class="select">
-    <select [(ngModel)]="filter" (change)="onChangeFilter($event)" class="select">
+    <select [(ngModel)]="filter" (change)="calculateTotal()" class="select">
       <option value="">-- Aucun filtre --</option>
       <option value="reglee">Réglée</option>
       <option value="annulee">Annulée</option>
@@ -19,7 +19,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let facture of filteredFactures">
+    <tr *ngFor="let facture of factures | facturesFilter:filter:'statut'">
       <td><a [routerLink]="[facture.numero]">{{facture.numero}}</a></td>
       <td><a [routerLink]="['../', 'clients', facture.clientId]">
         <span *ngIf="facture.clientDetails">{{facture.clientDetails.prenom}} {{facture.clientDetails.nom}}</span></a></td>

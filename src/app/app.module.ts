@@ -1,8 +1,8 @@
+import { AuthService } from 'app/shared/auth.service';
 import { AuthGuard } from './shared/auth-guard.service';
 import { FlashService } from './shared/flash.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
-import { AuthService } from './shared/auth.service';
 import { ClientsService } from './clients/clients.service';
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -26,7 +26,21 @@ import { FacturesService } from 'app/factures/factures.service';
 
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { HomeComponent } from './home/home.component';
+import { APP_INITIALIZER } from '@angular/core';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { FacturesFilterPipe } from './factures-filter.pipe';
+import { SignupComponent } from './auth/signup/signup.component';
 
+
+const firebaseConf = {
+  apiKey: "AIzaSyAQnkHAsKBKhSAT4AfuFdZp7_Iv2E9_yoI",
+  authDomain: "boite-a-recettes-4232d.firebaseapp.com",
+  databaseURL: "https://boite-a-recettes-4232d.firebaseio.com",
+  projectId: "boite-a-recettes-4232d",
+  storageBucket: "boite-a-recettes-4232d.appspot.com",
+  messagingSenderId: "531585022220"
+}
 
 @NgModule({
   declarations: [
@@ -42,12 +56,14 @@ import { HomeComponent } from './home/home.component';
     ClientsEditComponent,
     FacturesStartComponent,
     FacturesEditComponent,
-    HomeComponent
+    HomeComponent,
+    FacturesFilterPipe,
+    SignupComponent
   ],
   imports: [
-    BrowserModule, BrowserAnimationsModule, HttpModule, FormsModule, AppRoutingModule, ReactiveFormsModule, SimpleNotificationsModule.forRoot()
+    BrowserModule, BrowserAnimationsModule, HttpModule, FormsModule, AppRoutingModule, ReactiveFormsModule, SimpleNotificationsModule.forRoot(), AngularFireModule.initializeApp(firebaseConf)
   ],
-  providers: [ClientsService, FacturesService, AuthService, FlashService, AuthGuard],
+  providers: [ClientsService, FacturesService, AuthService, FlashService, AuthGuard, AngularFireAuth],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,3 +1,4 @@
+import { SignupComponent } from './auth/signup/signup.component';
 import { AuthGuard } from './shared/auth-guard.service';
 import { ClientsEditComponent } from './clients/clients-edit/clients-edit.component';
 import { LoginComponent } from './auth/login/login.component';
@@ -27,7 +28,7 @@ const appRoutes: Routes = [
     {path: 'new/:clientId', component: FacturesEditComponent},
     {path: ':numero', component: FacturesEditComponent},
   ]},
-  // {path: 'signup', component: SignupComponent},
+  {path: 'signup', component: SignupComponent},
   {path: 'login', component: LoginComponent}
 ]
 

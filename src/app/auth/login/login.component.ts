@@ -15,6 +15,15 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.authService.authStateChanged.subscribe(state => {
+      if(state) {
+        const returnUrl = this.route.snapshot.queryParams['from'];
+        if(returnUrl)
+          this.router.navigateByUrl(returnUrl);
+        else
+          this.router.navigateByUrl('/');
+      }
+    })
   }
 
   onSignin(form: NgForm){

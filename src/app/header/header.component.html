@@ -1,17 +1,16 @@
 <nav class="navbar">
   <div class="navbar-brand">
     <a class="navbar-item" [routerLink]="['/']">
-      <strong>Angular Clients {{isConnected}}</strong>
-      <button (click)="connect()">Connect</button>
+      <strong>Angular Clients</strong>
     </a>
   </div>
 
   <div class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" *ngIf="isConnected" [routerLink]="['clients']">
+      <a class="navbar-item" routerLinkActive="is-tab is-active" *ngIf="isConnected" [routerLink]="['clients']">
         Clients
       </a>
-      <a  [routerLink]="['factures']"  *ngIf="isConnected" class="navbar-item">
+      <a  [routerLink]="['factures']" routerLinkActive="is-tab is-active"  *ngIf="isConnected" class="navbar-item">
         Factures
       </a>
     </div>
@@ -30,7 +29,7 @@
             <a  [routerLink]="['login']" class="button is-primary">Connexion</a>
           </p>
           <p class="control">
-            <a href="#" class="button">Inscription</a>
+            <a [routerLink]="['signup']" class="button">Inscription</a>
           </p>
         </div>
       </div>

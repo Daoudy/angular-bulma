@@ -1,6 +1,7 @@
 import { AuthService } from './../shared/auth.service';
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ClientsService } from 'app/clients/clients.service';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -9,20 +10,14 @@ import { ClientsService } from 'app/clients/clients.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  isConnected;
+  @Input() isConnected;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.authStateChanged.subscribe((state:boolean) => {
-      console.log('CONNEXION : ', state);
-      this.isConnected = state;
-      console.log(this.isConnected);
-    })
   }
 
   ngOnDestroy(){
-    this.authService.authStateChanged.unsubscribe();
   }
 
   connect(){
