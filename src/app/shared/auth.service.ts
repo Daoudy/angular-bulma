@@ -10,10 +10,20 @@ const fireApp = firebase.initializeApp({
 
 @Injectable()
 export class AuthService {
-  // authStateChanged = new Subject();
+  authStateChanged = new Subject();
   token = null;
 
-  constructor(private router: Router){}
+  constructor(private router: Router){
+    fireApp.auth().onAuthStateChanged(state => {
+      if(state) {
+        fireApp.auth().currentUser.getIdToken().then(token => {
+          this.token = token
+          this.authStateChanged.next(true);
+        })
+      }
+      else this.authStateChanged.next(false);
+    })
+  }
 
   isConnected(){
     return this.token !== null;
@@ -32,6 +42,9 @@ export class AuthService {
   }
 
   logoutUser(){
-    fireApp.auth().signOut();
+    fireApp.auth().signOut().then(state => {
+      console.log(state);
+      this.router.navigateByUrl('/login')
+    });
   }
 }

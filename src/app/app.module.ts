@@ -1,3 +1,4 @@
+import { AuthGuard } from './shared/auth-guard.service';
 import { FlashService } from './shared/flash.service';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './auth/login/login.component';
@@ -24,6 +25,7 @@ import { FacturesEditComponent } from './factures/factures-edit/factures-edit.co
 import { FacturesService } from 'app/factures/factures.service';
 
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
@@ -39,12 +41,13 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
     ClientsStartComponent,
     ClientsEditComponent,
     FacturesStartComponent,
-    FacturesEditComponent
+    FacturesEditComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, HttpModule, FormsModule, AppRoutingModule, ReactiveFormsModule, SimpleNotificationsModule.forRoot()
   ],
-  providers: [ClientsService, FacturesService, AuthService, FlashService],
+  providers: [ClientsService, FacturesService, AuthService, FlashService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
